@@ -18,7 +18,8 @@ public class TestActivity1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         String extraName = getIntent().getStringExtra("name");
+        int age = getIntent().getIntExtra("age", 0);
         TextView textView = findViewById(R.id.name);
-        textView.setText(extraName);
+        textView.setText("name = " + extraName + "  age = " + age);
     }
 }

@@ -8,25 +8,41 @@ import android.os.Bundle;
 public class IntentWrapper {
 
     private Bundle mBundle;
+    private String originalUrl;
+    private RouteDemo routeDemo;
 
-    private IntentWrapper(Builder builder) {
-        this.mBundle = builder.mBundle;
+    private volatile static IntentWrapper instance = null;
+
+    public static IntentWrapper getInstance() {
+        if (instance == null) {
+            synchronized (IntentWrapper.class) {
+                if (instance == null) {
+                    instance = new IntentWrapper();
+                }
+            }
+        }
+        return instance;
     }
 
-    public static class Builder {
-        private Bundle mBundle;
-
-        public Builder() {
-
-        }
-
-        public Builder withString(String key, String value) {
-            mBundle.putString(key, value);
-            return this;
-        }
-
-        public IntentWrapper build() {
-            return new IntentWrapper(this);
-        }
+    public IntentWrapper build(RouteDemo routeDemo, String url) {
+        this.routeDemo = routeDemo;
+        this.originalUrl = url;
+        mBundle = new Bundle();
+        return this;
     }
+
+    public IntentWrapper withString(String key, String value) {
+        mBundle.putString(key, value);
+        return this;
+    }
+
+    public IntentWrapper withInt(String key, int value) {
+        mBundle.putInt(key, value);
+        return this;
+    }
+
+    public void open() {
+        routeDemo.open(originalUrl, mBundle);
+    }
+
 }

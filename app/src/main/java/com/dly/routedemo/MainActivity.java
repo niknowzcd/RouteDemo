@@ -20,10 +20,14 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.text1:
-                RouteDemo.open("route://test?name=555");
+                RouteDemo.getInstance().build("route://test")
+                        .withString("name", "张三")
+                        .withInt("age", 15)
+                        .open();
+//                RouteDemo.getInstance().open("route://test?name=555");
                 break;
             case R.id.text2:
-                RouteDemo.open("test2");
+                RouteDemo.getInstance().open("test2");
                 break;
         }
     }

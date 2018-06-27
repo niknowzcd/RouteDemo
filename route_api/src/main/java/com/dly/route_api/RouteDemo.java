@@ -10,8 +10,6 @@ import junit.framework.Assert;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,9 +19,21 @@ public class RouteDemo {
 
     private static HashMap<String, Class> activityMap = new HashMap<>();
     private static Application mApplication;
-    private static Bundle mBundle;
 
-    public static void init(Application application) {
+    private volatile static RouteDemo instance = null;
+
+    public static RouteDemo getInstance() {
+        if (instance == null) {
+            synchronized (RouteDemo.class) {
+                if (instance == null) {
+                    instance = new RouteDemo();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void init(Application application) {
         mApplication = application;
         try {
             //通过反射调用AutoCreateModuleActivityMap_app类的方法,并给activityMap赋值
@@ -39,7 +49,23 @@ public class RouteDemo {
         }
     }
 
-    public static void open(String url) {
+    public IntentWrapper build(String url) {
+        return IntentWrapper.getInstance().build(this,url);
+    }
+
+    public void open(String url, Bundle bundle) {
+        for (String key : activityMap.keySet()) {
+            if (checkUrlPath(url, key)) {
+                Intent intent = new Intent(mApplication, activityMap.get(key));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtras(bundle);
+                mApplication.startActivity(intent);
+            }
+        }
+    }
+
+
+    public void open(String url) {
         for (String key : activityMap.keySet()) {
             if (checkUrlPath(url, key)) {
                 Intent intent = new Intent(mApplication, activityMap.get(key));
@@ -50,7 +76,7 @@ public class RouteDemo {
         }
     }
 
-    private static Intent parseParams(Intent intent, String targetUrl) {
+    private Intent parseParams(Intent intent, String targetUrl) {
         Uri uri = Uri.parse(targetUrl);
         Set<String> queryParameterNames = uri.getQueryParameterNames();
         for (String queryParameterName : queryParameterNames) {
