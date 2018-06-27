@@ -19,7 +19,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
