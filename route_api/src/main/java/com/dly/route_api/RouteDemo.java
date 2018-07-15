@@ -94,8 +94,6 @@ public class RouteDemo {
         Assert.assertNotNull(targetUri.getScheme());
         Assert.assertNotNull(targetUri.getHost());
 
-//        TextUtils.equals(targetUri.getScheme(), matchUri.getScheme())
-
         if (targetUri.getScheme().equals(matchUri.getScheme()) && targetUri.getHost().equals(matchUri.getHost())) {
             return TextUtils.equals(targetUri.getPath(), matchUri.getPath());
         } else {
