@@ -1,17 +1,19 @@
 package com.dly.route_compiler;
 
 import com.dly.route_annotation.AutoWired;
+import com.dly.route_compiler.utils.ParamTypeKinds;
+import com.dly.route_compiler.utils.ParamsTypeUtils;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
+import com.squareup.javapoet.TypeSpec;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,13 +79,48 @@ public class AutoWiredProcessor extends AbstractProcessor {
                 for (Element element : variables) {
                     AutoWired autoWired = element.getAnnotation(AutoWired.class);
                     String variableName = element.getSimpleName().toString();
-                    String statment = "object." + variableName + " = object." + "getIntent()";
-
+                    String statement = "object." + variableName + " = object." + "getIntent()";
+                    if (buildStatement(variableName, element) != null) {
+                        statement += buildStatement(variableName, element);
+                        methodSpec.addStatement(statement, StringUtils.isEmpty(autoWired.name()) ? variableName : autoWired.name());
+                    }
                 }
+                TypeSpec.Builder builder = TypeSpec.classBuilder("autoWired")
+                        .addModifiers(Modifier.PUBLIC)
+                        .addMethod(methodSpec.build());
+
+
+
+
             }
         }
 
         return false;
+    }
+
+    private String buildStatement(String variableName, Element element) {
+        int type = ParamsTypeUtils.parseType(element);
+
+        if (type == ParamTypeKinds.BOOLEAN.ordinal()) {
+            return "getBooleanExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.BYTE.ordinal()) {
+            return "getByteExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.SHORT.ordinal()) {
+            return "getShortExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.INT.ordinal()) {
+            return "getIntExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.LONG.ordinal()) {
+            return "getLongExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.CHAR.ordinal()) {
+            return "getCharExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.FLOAT.ordinal()) {
+            return "getFloatExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.DOUBLE.ordinal()) {
+            return "getDoubleExtra($s, " + variableName + ")";
+        } else if (type == ParamTypeKinds.STRING.ordinal()) {
+            return "getStringExtra($S)";
+        }
+        return null;
     }
 
 

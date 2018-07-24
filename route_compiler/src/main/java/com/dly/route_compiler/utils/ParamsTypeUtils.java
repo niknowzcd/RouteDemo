@@ -29,7 +29,7 @@ public class ParamsTypeUtils {
      */
 
 
-    public static int paraseType(Element element) {
+    public static int parseType(Element element) {
         TypeMirror typeMirror = element.asType();
 
         if (typeMirror.getKind().isPrimitive()) {   //判断是否是基本类型 如int,long等,注意Long属于包装类,不属于基本类型
