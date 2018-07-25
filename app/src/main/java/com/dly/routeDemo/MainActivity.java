@@ -22,10 +22,11 @@ public class MainActivity extends AppCompatActivity {
                         .withString("name", "张三")
                         .withInt("age", 15)
                         .open();
-//                RouteDemo.getInstance().open("route://test?name=555");
                 break;
             case R.id.text2:
-                RouteDemo.getInstance().open("test2");
+                RouteDemo.getInstance().build("route://webView")
+                        .withString("url", "file:///android_asset/schame-test.html")
+                        .open();
                 break;
         }
     }
