@@ -105,13 +105,10 @@ public class AutoWiredProcessor extends AbstractProcessor {
             String QualifiedName = "object." + variableName;
             String statement = QualifiedName + " = object." + "getIntent().";
 
-            statement = buildStatement(QualifiedName, statement, ParamsTypeUtils.parseType(element), true);
-            methodSpec.addStatement(statement, StringUtils.isEmpty(autoWired.name()) ? variableName : autoWired.name());
-
-//            if (buildStatement(variableName, element) != null) {
-//                statement += buildStatement(variableName, element);
-//                methodSpec.addStatement(statement, StringUtils.isEmpty(autoWired.name()) ? variableName : autoWired.name());
-//            }
+            if (buildStatement(variableName, element) != null) {
+                statement += buildStatement(variableName, element);
+                methodSpec.addStatement(statement, StringUtils.isEmpty(autoWired.name()) ? variableName : autoWired.name());
+            }
         }
         String className = targetClass.getSimpleName() + "_AutoWired";     //生成的类名
         return TypeSpec.classBuilder(className)
@@ -120,55 +117,30 @@ public class AutoWiredProcessor extends AbstractProcessor {
                 .build();
     }
 
+    private String buildStatement(String variableName, Element element) {
+        int type = ParamsTypeUtils.parseType(element);
 
-    private String buildStatement(String originalValue, String statement, int type, boolean isActivity) {
         if (type == ParamTypeKinds.BOOLEAN.ordinal()) {
-            statement += (isActivity ? ("getBooleanExtra($S, " + originalValue + ")") : ("getBoolean($S)"));
+            return "getBooleanExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.BYTE.ordinal()) {
-            statement += (isActivity ? ("getByteExtra($S, " + originalValue + "") : ("getByte($S)"));
+            return "getByteExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.SHORT.ordinal()) {
-            statement += (isActivity ? ("getShortExtra($S, " + originalValue + ")") : ("getShort($S)"));
+            return "getShortExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.INT.ordinal()) {
-            statement += (isActivity ? ("getIntExtra($S, " + originalValue + ")") : ("getInt($S)"));
+            return "getIntExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.LONG.ordinal()) {
-            statement += (isActivity ? ("getLongExtra($S, " + originalValue + ")") : ("getLong($S)"));
+            return "getLongExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.CHAR.ordinal()) {
-            statement += (isActivity ? ("getCharExtra($S, " + originalValue + ")") : ("getChar($S)"));
+            return "getCharExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.FLOAT.ordinal()) {
-            statement += (isActivity ? ("getFloatExtra($S, " + originalValue + ")") : ("getFloat($S)"));
+            return "getFloatExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.DOUBLE.ordinal()) {
-            statement += (isActivity ? ("getDoubleExtra($S, " + originalValue + ")") : ("getDouble($S)"));
+            return "getDoubleExtra($s, " + variableName + ")";
         } else if (type == ParamTypeKinds.STRING.ordinal()) {
-            statement += (isActivity ? ("getStringExtra($S)") : ("getString($S)"));
+            return "getStringExtra($S)";
         }
-        return statement;
+        return null;
     }
-
-
-//    private String buildStatement(String variableName, Element element) {
-//        int type = ParamsTypeUtils.parseType(element);
-//
-//        if (type == ParamTypeKinds.BOOLEAN.ordinal()) {
-//            return "getBooleanExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.BYTE.ordinal()) {
-//            return "getByteExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.SHORT.ordinal()) {
-//            return "getShortExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.INT.ordinal()) {
-//            return "getIntExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.LONG.ordinal()) {
-//            return "getLongExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.CHAR.ordinal()) {
-//            return "getCharExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.FLOAT.ordinal()) {
-//            return "getFloatExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.DOUBLE.ordinal()) {
-//            return "getDoubleExtra($s, " + variableName + ")";
-//        } else if (type == ParamTypeKinds.STRING.ordinal()) {
-//            return "getStringExtra($S)";
-//        }
-//        return null;
-//    }
 
 
     private void collectData(Set<? extends Element> elements) throws IllegalAccessException {
