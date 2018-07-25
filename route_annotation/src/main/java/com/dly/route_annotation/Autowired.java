@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.CLASS)
-public @interface AutoWired {
+public @interface Autowired {
 
     String name() default "";
 }

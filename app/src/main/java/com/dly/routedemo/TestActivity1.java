@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.dly.route_annotation.Autowired;
 import com.dly.route_annotation.Route;
 
 /**
@@ -13,13 +14,19 @@ import com.dly.route_annotation.Route;
 @Route("route://test")
 public class TestActivity1 extends AppCompatActivity {
 
+    @Autowired
+    public String name = "123";
+
+    @Autowired
+    public int age;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         String extraName = getIntent().getStringExtra("name");
-        int age = getIntent().getIntExtra("age", 0);
+//        int age = getIntent().getIntExtra("age", 0);
         TextView textView = findViewById(R.id.name);
-        textView.setText("name = " + extraName + "  age = " + age);
+        textView.setText("name = " + name + "  age = " + age);
     }
 }
