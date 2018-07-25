@@ -1,8 +1,7 @@
-package com.dly.routedemo;
+package com.dly.routeDemo;
 
 import android.app.Application;
 
-import com.dly.route_annotation.Route;
 import com.dly.route_api.RouteDemo;
 
 

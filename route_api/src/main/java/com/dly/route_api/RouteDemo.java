@@ -50,7 +50,7 @@ public class RouteDemo {
     }
 
     public IntentWrapper build(String url) {
-        return IntentWrapper.getInstance().build(this,url);
+        return IntentWrapper.getInstance().build(this, url);
     }
 
     public void open(String url, Bundle bundle) {
@@ -101,4 +101,7 @@ public class RouteDemo {
         }
     }
 
+    public void inject(Object object) {
+        InjectManager.inject(object);
+    }
 }

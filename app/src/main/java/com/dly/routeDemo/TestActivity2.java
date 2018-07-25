@@ -1,4 +1,4 @@
-package com.dly.routedemo;
+package com.dly.routeDemo;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

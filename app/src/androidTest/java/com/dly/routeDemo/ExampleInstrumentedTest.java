@@ -1,4 +1,4 @@
-package com.dly.routedemo;
+package com.dly.routeDemo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -90,7 +90,7 @@ public class AutoWiredProcessor extends AbstractProcessor {
 
 
     private TypeSpec createTypeSpec(ParameterSpec parameterSpec, Map.Entry<TypeElement, List<Element>> entry) {
-        MethodSpec.Builder methodSpec = MethodSpec.methodBuilder("autoWired")   //定义方法
+        MethodSpec.Builder methodSpec = MethodSpec.methodBuilder("autowired")   //定义方法
                 .addModifiers(Modifier.PUBLIC)
                 .addModifiers(Modifier.STATIC)
                 .addParameter(parameterSpec);
@@ -106,11 +106,11 @@ public class AutoWiredProcessor extends AbstractProcessor {
             String statement = QualifiedName + " = object." + "getIntent().";
 
             if (buildStatement(variableName, element) != null) {
-                statement += buildStatement(variableName, element);
+                statement += buildStatement(QualifiedName, element);
                 methodSpec.addStatement(statement, StringUtils.isEmpty(autoWired.name()) ? variableName : autoWired.name());
             }
         }
-        String className = targetClass.getSimpleName() + "_AutoWired";     //生成的类名
+        String className = targetClass.getSimpleName() + "_Autowired";     //生成的类名
         return TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(methodSpec.build())
@@ -121,21 +121,21 @@ public class AutoWiredProcessor extends AbstractProcessor {
         int type = ParamsTypeUtils.parseType(element);
 
         if (type == ParamTypeKinds.BOOLEAN.ordinal()) {
-            return "getBooleanExtra($s, " + variableName + ")";
+            return "getBooleanExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.BYTE.ordinal()) {
-            return "getByteExtra($s, " + variableName + ")";
+            return "getByteExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.SHORT.ordinal()) {
-            return "getShortExtra($s, " + variableName + ")";
+            return "getShortExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.INT.ordinal()) {
-            return "getIntExtra($s, " + variableName + ")";
+            return "getIntExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.LONG.ordinal()) {
-            return "getLongExtra($s, " + variableName + ")";
+            return "getLongExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.CHAR.ordinal()) {
-            return "getCharExtra($s, " + variableName + ")";
+            return "getCharExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.FLOAT.ordinal()) {
-            return "getFloatExtra($s, " + variableName + ")";
+            return "getFloatExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.DOUBLE.ordinal()) {
-            return "getDoubleExtra($s, " + variableName + ")";
+            return "getDoubleExtra($S, " + variableName + ")";
         } else if (type == ParamTypeKinds.STRING.ordinal()) {
             return "getStringExtra($S)";
         }
