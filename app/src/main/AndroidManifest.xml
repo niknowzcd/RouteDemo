@@ -17,8 +17,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.dly.routeDemo.TestActivity1"/>
-        <activity android:name="com.dly.routeDemo.TestWebActivity"/>
+        <activity android:name="com.dly.routeDemo.TestActivity" />
+        <activity android:name="com.dly.routeDemo.TestWebActivity" />
+
+        <activity android:name=".OuterChainFilterActivity">
+            <intent-filter>
+                <data android:scheme="route" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

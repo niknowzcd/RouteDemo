@@ -13,7 +13,7 @@ import com.dly.route_api.RouteDemo;
  * Created by dly on 2018/6/22.
  */
 @Route("route://test")
-public class TestActivity1 extends AppCompatActivity {
+public class TestActivity extends AppCompatActivity {
 
     @Autowired
     public String name = "123";
